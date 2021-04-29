@@ -108,3 +108,23 @@ const viewAllEmployees = () => {
         start();
     });
 };
+
+// function to view all roles
+const viewRoles = () => {
+    connection.query(('SELECT * FROM role'), (err, res) => {
+        if (err) throw err;
+        console.table(res);
+
+        start();
+    });
+};
+
+// function to view all departments
+const viewDepartments = () => {
+    connection.query(('SELECT * FROM department'), (err, res) => {
+        if (err) throw err;
+        console.table(res);
+
+        start();
+    });
+};
