@@ -28,12 +28,18 @@ const start = () => {
         message: 'What would you like to do?',
         choices: [
             'View All Employees',
-            'View All Employees by Department',
-            'View All Employees by Manager',
+            'View All Roles',
+            'View All Departments',
             'Add Employee',
-            'Remove Employee',
+            'Add Role',
+            'Add Department',
             'Update Employee Role',
-            'Update Employee Manager',
+            "Update Employee's Manager",
+            'View Employees by Manager',
+            'Remove Department',
+            'Remove Role',
+            'Remove Employee',
+            'View total budget of Department'
         ],
     })
     .then((answer) => {
@@ -42,28 +48,52 @@ const start = () => {
                 viewAllEmployees();
                 break;
 
-            case 'View All Employees by Department':
-                viewByDepartment();
+            case 'View All Roles':
+                viewRoles();
                 break;
             
-            case 'View All Employees by Manager':
-                viewByManager();
+            case 'View All Departments':
+                viewDepartments();
                 break;
-        
+            
             case 'Add Employee':
                 addEmployee();
                 break;
+            
+            case 'Add Role':
+                addRole();
+                break;
 
+            case 'Add Department':
+                addDepartment();
+                break;
+
+            case 'Update Employee Role':
+                updateEmployeeRole();
+                break;
+
+            case "Update Employee's Manager":
+                updateEmployeeManager();
+                break;
+
+            case 'View Employees by Manager':
+                viewEmployeebyManager();
+                break;
+
+            case 'Remove Department':
+                removeDepartment();
+                break;
+            
+            case 'Remove Role':
+                removeRole();
+                break;
+            
             case 'Remove Employee':
                 removeEmployee();
                 break;
 
-            case 'Update Employee Role':
-                updateRole();
-                break;
-
-            case 'Update Employee Manager':
-                updateManager();
+            case 'View total budget of Department':
+                viewBudget();
                 break;
         };
     });
@@ -72,15 +102,9 @@ const start = () => {
 // function to view all employees
 const viewAllEmployees = () => {
     connection.query(('SELECT * FROM employee'), (err, res) => {
-        console.log(res);
+        if (err) throw err;
+        console.table(res);
 
         start();
     });
 };
-
-// function to view by department
-const viewByDepartment = () => {
-    connection.query(('SELECT * FROM employee WHERE ?'), (err, res) => {
-        
-    })
-}
