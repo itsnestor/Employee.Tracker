@@ -77,3 +77,10 @@ const viewAllEmployees = () => {
         start();
     });
 };
+
+// function to view by department
+const viewByDepartment = () => {
+    connection.query(('SELECT * FROM employee WHERE ?'), (err, res) => {
+        
+    })
+}
