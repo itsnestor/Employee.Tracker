@@ -19,6 +19,7 @@ connection.connect((err) => {
     start();
 });
 
+// start prompting user what they want to do
 const start = () => {
     inquirer
     .prompt({
@@ -45,7 +46,6 @@ const start = () => {
                 viewByDepartment();
                 break;
             
-            
             case 'View All Employees by Manager':
                 viewByManager();
                 break;
@@ -65,6 +65,15 @@ const start = () => {
             case 'Update Employee Manager':
                 updateManager();
                 break;
-        }
-    })
-}
+        };
+    });
+};
+
+// function to view all employees
+const viewAllEmployees = () => {
+    connection.query(('SELECT * FROM employee'), (err, res) => {
+        console.log(res);
+
+        start();
+    });
+};
