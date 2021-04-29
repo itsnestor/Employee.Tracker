@@ -1,6 +1,7 @@
 // dependencies
 const mysql = require('mysql');
 const inquirer = require('inquirer');
+const consTable = require('console.table');
 
 // creating connection to mysql
 const connection = mysql.createConnection({
@@ -128,3 +129,72 @@ const viewDepartments = () => {
         start();
     });
 };
+
+// function to add employee
+const addEmployee = () => {
+    connection.query(('SELECT * FROM role'), (err, res) => {
+        if (err) throw err;
+        let newRole = res.map((role) => ({ name: role.title, value: role.id }));
+
+    connection.query(('SELECT * FROM employee'), (err, res) => {
+        if (err) throw err;
+        let newManager = res.map((manager) => ({
+            name: `${manager.first_name} ${manager.last_name}`,
+            value: manager.id
+        }));
+
+        inquirer
+          .prompt([
+              {
+                  name: 'firstName',
+                  type: 'input',
+                  message: "Please enter employee's first name.",
+              },
+              {
+                  name: "lastName",
+                  type: 'input',
+                  message: "Please enter employee's last name.",
+              },
+              {
+                  name: 'role',
+                  type: 'rawlist',
+                  message: "What is the employee's role?",
+                  choices: newRole,
+              },
+              {
+                  name: 'manager',
+                  type: 'rawlist',
+                  message: "What is the employee's manager?",
+                  choices: newManager,
+              },
+          ])
+          .then((answer) => {
+              connection.query(
+                  "INSERT INTO employee SET ?",
+                  {
+                      first_name: answer.firstName,
+                      last_name: answer.lastName,
+                      manager_id: answer.manager,
+                      role_id: answer.role,
+                  },
+
+                  (err, res) => {
+                      if (err) throw err;
+                      console.log(`${res.affectedRows} employee inserted!`);
+
+                      start();
+                  }
+              );
+          });
+    });
+    });
+};
+
+// function to Add Department
+// function to Update Employee Role
+// function to Update Employee's Manager
+// function to View Employees by Manager
+// function to Remove Department
+// function to Remove Role
+// function to Remove Employee
+// function to View total budget of Department
