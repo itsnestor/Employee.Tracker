@@ -514,3 +514,37 @@ const removeEmployee = () => {
     });
 };
 // function to View total budget of Department
+const viewBudget = () => {
+    connection.query('SELECT * FROM department', (err, res) => {
+        if (err) throw err;
+        let budgetDepartment = res.map((department) => ({
+            name: `${department.name}`,
+            value: department.id,
+        }));
+
+        inquirer
+          .prompt([
+              {
+                  name: 'department',
+                  type: 'rawlist',
+                  message: "Which department's budget would you like to view?",
+                  choices: budgetDepartment,
+              },
+          ])
+          .then((answer) => {
+            connection.query(
+                'SELECT SUM(salary) AS budget FROM role WHERE ?',
+                {
+                    department_id: answer.deparment,
+                },
+
+                (err, res) => {
+                    if (err) throw err;
+                    console.table(res);
+
+                    start();
+                }
+            );
+          });
+    });
+};
