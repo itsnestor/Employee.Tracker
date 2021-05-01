@@ -238,7 +238,34 @@ const addRole = () => {
 };
 
 // function to Add Department
+const addDepartment = () => {
+    inquirer
+      .prompt([
+          {
+              name: 'newDepartment',
+              type: 'input',
+              message: 'Please enter your new department name.',
+          },
+      ])
+      .then((answer) => {
+          connection.query(
+              'INSERT INTO department SET ?',
+              {
+                  name: answer.newDepartment,
+              },
+
+              (err, res) => {
+                  if (err) throw err;
+                  console.log(`${res.affectedRows} department inserted!`)
+
+                  start();
+              }
+          );
+      });
+};
+
 // function to Update Employee Role
+
 // function to Update Employee's Manager
 // function to View Employees by Manager
 // function to Remove Department
