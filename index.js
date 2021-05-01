@@ -409,6 +409,38 @@ const viewEmployeebyManager = () => {
 };
 
 // function to Remove Department
+const removeDepartment = () => {
+    connection.query('SELECT * FROM depmartment', (err, res) => {
+        if (err) throw err;
+        let deleteDepartment = res.map((department) => ({
+            name: `${deparment.name}`,
+            value: deparment.id,
+        }));
+
+        inquirer
+          .prompt([
+              {
+                  name: 'department',
+                  type: 'rawlist',
+                  message: 'Which department would you like to remove?',
+                  choices: deleteDepartment,
+              },
+          ])
+          .then((answer) => {
+              connection.query(
+                  'DELETE FROM deparment WHERE ?',
+                  {
+                      id: answer.deparment,
+                  },
+
+                  (err, res) => {
+                      if (err) throw err;
+                      console.log(`${res.affectedRows} department deleted!`);
+                  }
+              )
+          })
+    });
+}
 // function to Remove Role
 // function to Remove Employee
 // function to View total budget of Department
