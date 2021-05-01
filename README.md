@@ -40,9 +40,14 @@
   * Delete departments, roles, employees
   * View total utilized budget of a department
 
+  Gif of how it works!
+
+  ![walkthrough](Assets/Employee-Tracker-Walkthrough.gif)
+
 ## Links
 
   * Github Repository URL: https://github.com/itsnestor/Employee.Tracker
+  * Walkthrough Video: https://drive.google.com/file/d/1T-BfZZe3KufBkSI1Y-33nPAJKKqNzG0O/view
 
 ## License
 
