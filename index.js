@@ -436,11 +436,47 @@ const removeDepartment = () => {
                   (err, res) => {
                       if (err) throw err;
                       console.log(`${res.affectedRows} department deleted!`);
+
+                      start();
                   }
               )
           })
     });
 }
 // function to Remove Role
+const removeRole = () => {
+    connection.query('SELECT * FROM role', (err, res) => {
+        if (err) throw err;
+        let deleteRole = res.map((role) => ({
+            name: role.title,
+            value: role.id,
+        }));
+
+        inquirer
+          .prompt([
+              {
+                  name: 'role',
+                  type: 'rawlist',
+                  message: 'Which role would you like to delete?',
+                  choices: deleteRole,
+              },
+          ])
+          .then((answer) => {
+              connection.query(
+                  'DELETE FROM role WHERE ?',
+                  {
+                      id: answer.role,
+                  },
+
+                  (err, res) => {
+                      if (err) throw err;
+                      console.log(`${res.affectedRows} role deleted!`);
+
+                      start();
+                  }
+              );
+          });
+    });
+};
 // function to Remove Employee
 // function to View total budget of Department
