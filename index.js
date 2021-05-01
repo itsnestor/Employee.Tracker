@@ -223,7 +223,7 @@ const addRole = () => {
                     {
                         title: answer.title,
                         salary: answer.salary,
-                        department_id: answer.deparment,
+                        department_id: answer.department,
                     },
 
                     (err, res) => {
