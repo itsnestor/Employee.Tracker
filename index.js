@@ -192,11 +192,11 @@ const addEmployee = () => {
 
 // function to Add Role
 const addRole = () => {
-    connection.query('SELECT * FROM depmartment', (err, res) => {
+    connection.query('SELECT * FROM department', (err, res) => {
         if (err) throw err;
         let newDepartment = res.map((department) => ({
-            name: `${deparment.name}`,
-            value: deparment.id,
+            name: `${department.name}`,
+            value: department.id,
         }));
         inquirer
             .prompt([
@@ -345,7 +345,7 @@ const updateEmployeeManager = () => {
                       name: 'manager',
                       type: 'rawlist',
                       message: "Who is the employee's new manager?",
-                      choice: newManager,
+                      choices: newManager,
                   },
               ])
               .then((answer) => {
@@ -362,7 +362,6 @@ const updateEmployeeManager = () => {
                       (err, res) => {
                           if (err) throw err;
                           console.log(`${res.affectedRows} new manager inserted`);
-                          console.table(res);
 
                           start();
                       }
@@ -392,7 +391,7 @@ const viewEmployeebyManager = () => {
           .then((answer) => {
               newManager = answer.manager.split(':');
               connection.query(
-                  'SELECT * FROM  emplyoee WHERE ?',
+                  'SELECT * FROM  employee WHERE ?',
                   {
                       manager_id: newManager[0],
                   },
@@ -410,11 +409,11 @@ const viewEmployeebyManager = () => {
 
 // function to Remove Department
 const removeDepartment = () => {
-    connection.query('SELECT * FROM depmartment', (err, res) => {
+    connection.query('SELECT * FROM department', (err, res) => {
         if (err) throw err;
         let deleteDepartment = res.map((department) => ({
-            name: `${deparment.name}`,
-            value: deparment.id,
+            name: `${department.name}`,
+            value: department.id,
         }));
 
         inquirer
@@ -428,9 +427,9 @@ const removeDepartment = () => {
           ])
           .then((answer) => {
               connection.query(
-                  'DELETE FROM deparment WHERE ?',
+                  'DELETE FROM department WHERE ?',
                   {
-                      id: answer.deparment,
+                      id: answer.department,
                   },
 
                   (err, res) => {
@@ -535,7 +534,7 @@ const viewBudget = () => {
             connection.query(
                 'SELECT SUM(salary) AS budget FROM role WHERE ?',
                 {
-                    department_id: answer.deparment,
+                    department_id: answer.department,
                 },
 
                 (err, res) => {
