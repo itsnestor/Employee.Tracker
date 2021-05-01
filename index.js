@@ -318,6 +318,59 @@ const updateEmployeeRole = () => {
 };
 
 // function to Update Employee's Manager
+const updateEmployeeManager = () => {
+    connection.query('SELECT * FROM employee', (err, res) => {
+        if (err) throw err;
+        let newManager = res.map((manager) => ({
+            name: `${manager.first_name} ${manager.last_name}`,
+            value: manager.id,
+        }));
+
+        connection.query('SELECT * FROM employee', (err, res) =>  {
+            if (err) throw err;
+            let newEmployee = res.map((employee) => ({
+                name: `${employee.first_name} ${employee.last_name}`,
+                value: employee.id,
+            }));
+
+            inquirer
+              .prompt([
+                  {
+                      name: 'employee',
+                      type: 'rawlist',
+                      message: 'Which employee do you want to update?',
+                      choices: newEmployee,
+                  },
+                  {
+                      name: 'manager',
+                      type: 'rawlist',
+                      message: "Who is the employee's new manager?",
+                      choice: newManager,
+                  },
+              ])
+              .then((answer) => {
+                  connection.query(
+                      'UPDATE employee SET ? WHERE ?',
+                      [
+                          {
+                              manager_id: answer.manager,
+                          },
+                          {
+                              id: answer.employee,
+                          },
+                      ],
+                      (err, res) => {
+                          if (err) throw err;
+                          console.log(`${res.affectedRows} new manager inserted`);
+                          console.table(res);
+
+                          start();
+                      }
+                  );
+              });
+        });
+    });
+};
 // function to View Employees by Manager
 // function to Remove Department
 // function to Remove Role
