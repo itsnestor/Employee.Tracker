@@ -190,6 +190,53 @@ const addEmployee = () => {
     });
 };
 
+// function to Add Role
+const addRole = () => {
+    connection.query('SELECT * FROM depmartment', (err, res) => {
+        if (err) throw err;
+        let newDepartment = res.map((department) => ({
+            name: `${deparment.name}`,
+            value: deparment.id,
+        }));
+        inquirer
+            .prompt([
+                {
+                    name: 'title',
+                    type: 'input',
+                    message: 'Please enter your role name.',
+                },
+                {
+                    name: 'salary',
+                    type: 'input',
+                    message: 'Please enter the salary',
+                },
+                {
+                    name: 'department',
+                    type: 'rawlist',
+                    message: 'What department is your',
+                    choices: newDepartment,
+                },
+            ])
+            .then((answer) => {
+                connection.query(
+                    'INSERT INTO role SET ?',
+                    {
+                        title: answer.title,
+                        salary: answer.salary,
+                        department_id: answer.deparment,
+                    },
+
+                    (err, res) => {
+                        if (err) throw err;
+                        console.log(`${res.affectedRows} role inserted!`);
+
+                        start();
+                    }
+                );
+            });
+    });
+};
+
 // function to Add Department
 // function to Update Employee Role
 // function to Update Employee's Manager
