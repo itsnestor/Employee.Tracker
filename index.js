@@ -265,6 +265,57 @@ const addDepartment = () => {
 };
 
 // function to Update Employee Role
+const updateEmployeeRole = () => {
+    connection.query('SELECT * FROM role', (err, res) => {
+        if (err) throw err;
+        let newRole = res.map((role) => ({
+            name: role.title,
+            value: role.id,
+        }));
+
+        connection.query('SELECT * FROM employee', (err, res) => {
+            if (err) throw err;
+            let newEmployee = res.map((employee) => ({
+                name: `${employee.first_name} ${employee.last_name}`,
+                value: employee.id,
+            }));
+
+            inquirer
+              .prompt([
+                {
+                    name: 'employee',
+                    type: 'rawlist',
+                    message: 'Which employee do you want to update?',
+                    choices: newEmployee,
+                },
+                {
+                    name: 'role',
+                    type: 'rawlist',
+                    choices: newRole,
+                },
+              ])
+              .then((answer) => {
+                  connection.query(
+                      'UPDATE employee SET ? WHERE ?',
+                      [
+                          {
+                              role_id: answer.role,
+                          },
+                          {
+                              id: answer.employee,
+                          },
+                      ],
+                      (err, res) => {
+                          if (err) throw err;
+                          console.log(`${res.affectedRows} new role inserted!`);
+
+                          start();
+                      }
+                  );
+              });
+        });
+    });
+};
 
 // function to Update Employee's Manager
 // function to View Employees by Manager
