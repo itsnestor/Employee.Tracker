@@ -372,6 +372,42 @@ const updateEmployeeManager = () => {
     });
 };
 // function to View Employees by Manager
+const viewEmployeebyManager = () => {
+    connection.query('SELECT * FROM employee', (err, res) => {
+        if (err) throw err;
+        let newManager = res.map((manager) => ({
+            name: `${manager.first_name} ${manager.last_name}`,
+            value: `${manager.id}: ${manager.first_name} ${manager.last_name}`
+        }));
+
+        inquirer
+          .prompt([
+              {
+                  name: 'manager',
+                  type: 'rawlist',
+                  message: "What is the employee's manager's name?",
+                  choices: newManager,
+              },
+          ])
+          .then((answer) => {
+              newManager = answer.manager.split(':');
+              connection.query(
+                  'SELECT * FROM  emplyoee WHERE ?',
+                  {
+                      manager_id: newManager[0],
+                  },
+
+                  (err, res) => {
+                      if (err) throw err;
+                      console.table(`${newManager[1]} is the manager of these employees: `, res);
+
+                      start();
+                  }
+              );
+          });
+    });
+};
+
 // function to Remove Department
 // function to Remove Role
 // function to Remove Employee
